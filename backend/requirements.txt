@@ -1,0 +1,21 @@
+# --- ML pipeline (M1) ---
+pandas>=2.2
+numpy>=1.26
+scikit-learn>=1.4
+xgboost>=2.0
+joblib>=1.3
+matplotlib>=3.8
+
+# --- API + data layer (M2) ---
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+pydantic-settings>=2.2
+python-dotenv>=1.0
+sqlalchemy>=2.0
+psycopg2-binary>=2.9   # Postgres driver for prod (Supabase); SQLite is built-in for dev
+
+# --- Scraper (M3) ---
+httpx>=0.27
+selectolax>=0.3
+tenacity>=8.2

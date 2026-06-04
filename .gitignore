@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# ML artifacts & data (keep the presentation plots for the README)
+backend/ml/data/*.csv
+backend/ml/data/*.parquet
+backend/ml/artifacts/*
+!backend/ml/artifacts/*.png
+*.pkl
+*.joblib
+
+# Local dev database (seeded at runtime)
+*.db
+*.sqlite3
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+frontend/.vercel/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

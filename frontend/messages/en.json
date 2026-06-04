@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "title": "Lowballer — underpriced car deals",
+    "description": "ML-flagged used cars listed below their fair market value."
+  },
+  "header": {
+    "tagline": "Underpriced cars, flagged by ML"
+  },
+  "live": {
+    "indicator": "Live",
+    "newDeals": "New deals",
+    "waiting": "Watching for new deals…",
+    "new": "NEW"
+  },
+  "filters": {
+    "make": "Make",
+    "makePlaceholder": "e.g. Toyota",
+    "minBelow": "Min % below",
+    "minPlaceholder": "e.g. 15",
+    "apply": "Filter"
+  },
+  "deals": {
+    "title": "Deals",
+    "count": "{count} deals",
+    "none": "No deals match. Try widening the filters.",
+    "apiError": "Couldn't reach the API ({error}). Is the backend running on :8000?",
+    "modelError": "model ±{mae} avg error",
+    "belowFairValue": "~{amount} below fair value"
+  },
+  "deal": {
+    "back": "All deals",
+    "fairValue": "{amount} fair value",
+    "below": "~{amount} below",
+    "viewOriginal": "View original listing",
+    "specs": "Specs",
+    "whyWorthMore": "Why we think it's worth more",
+    "comparable": "Comparable {make} listings the model learned from:",
+    "noComps": "No close comparables in the dataset yet.",
+    "car": "Car",
+    "mileage": "Mileage",
+    "asking": "Asking",
+    "reviewBanner": "Unusually large discount — verify it isn't a scam, salvage title, or data error."
+  },
+  "badge": {
+    "below": "{pct}% below",
+    "review": "review",
+    "reviewTooltip": "Unusually large discount — verify it isn't a scam, salvage title, or data error."
+  },
+  "valuation": {
+    "asking": "Asking",
+    "fair": "Fair value"
+  },
+  "specs": {
+    "mileage": "Mileage",
+    "year": "Year",
+    "engine": "Engine",
+    "fuel": "Fuel",
+    "gear": "Gear",
+    "origin": "Origin",
+    "region": "Region",
+    "options": "Options"
+  },
+  "units": {
+    "km": "km",
+    "sar": "SAR"
+  },
+  "enums": {
+    "fuel": { "Gas": "Gas", "Diesel": "Diesel", "Hybrid": "Hybrid" },
+    "gear": { "Automatic": "Automatic", "Manual": "Manual" },
+    "origin": { "Saudi": "Saudi", "Gulf Arabic": "Gulf", "Imported": "Imported", "Other": "Other" },
+    "options": { "Full": "Full", "Semi Full": "Semi-full", "Standard": "Standard" },
+    "region": {
+      "Riyadh": "Riyadh", "Jeddah": "Jeddah", "Dammam": "Dammam", "Makkah": "Makkah",
+      "Madinah": "Madinah", "Abha": "Abha", "Tabuk": "Tabuk"
+    }
+  }
+}
