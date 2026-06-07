@@ -19,6 +19,8 @@ create table if not exists listings (
     color        text,
     options      text,
     asking_price double precision not null,
+    image        text,
+    condition    text,
     scraped_at   timestamptz not null default now()
 );
 

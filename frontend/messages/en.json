@@ -4,7 +4,7 @@
     "description": "ML-flagged used cars listed below their fair market value."
   },
   "header": {
-    "tagline": "Underpriced cars, flagged by ML"
+    "tagline": "Underpriced electronics, by comparable price"
   },
   "live": {
     "indicator": "Live",
@@ -13,8 +13,8 @@
     "new": "NEW"
   },
   "filters": {
-    "make": "Make",
-    "makePlaceholder": "e.g. Toyota",
+    "make": "Category",
+    "makePlaceholder": "e.g. GPU",
     "minBelow": "Min % below",
     "minPlaceholder": "e.g. 15",
     "apply": "Filter"
@@ -31,15 +31,16 @@
     "back": "All deals",
     "fairValue": "{amount} fair value",
     "below": "~{amount} below",
-    "viewOriginal": "View original listing",
-    "specs": "Specs",
-    "whyWorthMore": "Why we think it's worth more",
-    "comparable": "Comparable {make} listings the model learned from:",
-    "noComps": "No close comparables in the dataset yet.",
-    "car": "Car",
-    "mileage": "Mileage",
-    "asking": "Asking",
-    "reviewBanner": "Unusually large discount — verify it isn't a scam, salvage title, or data error."
+    "viewOriginal": "View on eBay",
+    "findOnHaraj": "Search on eBay",
+    "specs": "Details",
+    "whyWorthMore": "How the fair price is set",
+    "comparable": "Comparable {model} listings the median is based on:",
+    "noComps": "No close comparables yet.",
+    "car": "Listing",
+    "mileage": "Condition",
+    "asking": "Price",
+    "reviewBanner": "Unusually large discount — likely a defective, locked, or mislisted item."
   },
   "badge": {
     "below": "{pct}% below",
@@ -51,18 +52,14 @@
     "fair": "Fair value"
   },
   "specs": {
-    "mileage": "Mileage",
-    "year": "Year",
-    "engine": "Engine",
-    "fuel": "Fuel",
-    "gear": "Gear",
-    "origin": "Origin",
-    "region": "Region",
-    "options": "Options"
+    "category": "Category",
+    "model": "Model",
+    "condition": "Condition",
+    "fairValue": "Fair value (median)"
   },
   "units": {
     "km": "km",
-    "sar": "SAR"
+    "sar": "USD"
   },
   "enums": {
     "fuel": { "Gas": "Gas", "Diesel": "Diesel", "Hybrid": "Hybrid" },

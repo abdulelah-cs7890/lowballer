@@ -37,6 +37,9 @@ class Listing(Base):
     options: Mapped[str | None] = mapped_column(String, nullable=True)
 
     asking_price: Mapped[float] = mapped_column(Float, nullable=False)
+    # product fields (eBay): cars leave these null
+    image: Mapped[str | None] = mapped_column(String, nullable=True)
+    condition: Mapped[str | None] = mapped_column(String, nullable=True)
     scraped_at: Mapped[dt.datetime] = mapped_column(DateTime, server_default=func.now())
 
 

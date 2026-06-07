@@ -26,6 +26,8 @@ def _deal_dict(listing: Listing, valuation: Valuation) -> dict:
         "region": listing.region,
         "url": listing.url,
         "title": listing.title,
+        "image": listing.image,
+        "condition": listing.condition,
         "asking_price": listing.asking_price,
         "predicted_price": valuation.predicted_price,
         "percent_below": valuation.percent_below,
@@ -133,6 +135,8 @@ def find_comps(session: Session, listing: Listing, limit: int = 8) -> list[dict]
             "model": c.model,
             "year": c.year,
             "mileage_km": c.mileage_km,
+            "title": c.title,
+            "condition": c.condition,
             "asking_price": c.asking_price,
         }
         for c in comps
@@ -157,6 +161,8 @@ def record_listing(
     for field in _NORMALIZED_FIELDS:
         setattr(listing, field, record.get(field))
     listing.asking_price = record["price"]
+    listing.image = record.get("image")
+    listing.condition = record.get("condition")
     listing.source = source
     listing.url = url
     listing.title = title

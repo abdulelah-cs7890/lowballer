@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     # Comma-separated origins allowed to call the API (the Next.js dev server).
     cors_origins: str = "http://localhost:3000"
 
+    # eBay Browse API (client-credentials OAuth). Get keys at developer.ebay.com.
+    ebay_client_id: str = ""
+    ebay_client_secret: str = ""
+    ebay_marketplace: str = "EBAY_US"
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property

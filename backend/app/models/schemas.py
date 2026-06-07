@@ -14,6 +14,8 @@ class DealOut(BaseModel):
     region: str | None
     url: str | None
     title: str | None
+    image: str | None = None
+    condition: str | None = None
     asking_price: float
     predicted_price: float
     percent_below: float
@@ -26,6 +28,8 @@ class CompOut(BaseModel):
     model: str | None
     year: int | None
     mileage_km: int | None
+    title: str | None = None
+    condition: str | None = None
     asking_price: float
 
 

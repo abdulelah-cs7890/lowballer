@@ -1,14 +1,16 @@
 export type Deal = {
   id: string;
-  make: string | null;
-  model: string | null;
+  make: string | null; // product category (GPU, Phone, …)
+  model: string | null; // product model (RTX 4090, …)
   year: number | null;
   mileage_km: number | null;
   region: string | null;
   url: string | null;
   title: string | null;
+  image: string | null;
+  condition: string | null;
   asking_price: number;
-  predicted_price: number;
+  predicted_price: number; // comps median (fair value)
   percent_below: number;
   needs_review: boolean;
   model_mae: number | null;
@@ -19,6 +21,8 @@ export type Comp = {
   model: string | null;
   year: number | null;
   mileage_km: number | null;
+  title: string | null;
+  condition: string | null;
   asking_price: number;
 };
 

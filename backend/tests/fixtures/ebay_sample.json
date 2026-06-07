@@ -1,0 +1,33 @@
+{
+  "RTX 4090": [
+    {"id": "v1|111|0", "title": "NVIDIA GeForce RTX 4090 Founders Edition 24GB", "price": 1450.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/111", "image": "https://i.ebayimg.com/111.jpg", "model": "RTX 4090"},
+    {"id": "v1|112|0", "title": "ASUS ROG Strix RTX 4090 OC 24GB", "price": 1550.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/112", "image": "https://i.ebayimg.com/112.jpg", "model": "RTX 4090"},
+    {"id": "v1|113|0", "title": "MSI RTX 4090 Gaming Trio 24GB", "price": 1600.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/113", "image": "https://i.ebayimg.com/113.jpg", "model": "RTX 4090"},
+    {"id": "v1|114|0", "title": "Gigabyte RTX 4090 Gaming OC", "price": 1650.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/114", "image": "https://i.ebayimg.com/114.jpg", "model": "RTX 4090"},
+    {"id": "v1|115|0", "title": "RTX 4090 Founders Edition", "price": 1650.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/115", "image": "https://i.ebayimg.com/115.jpg", "model": "RTX 4090"},
+    {"id": "v1|116|0", "title": "Zotac RTX 4090 AMP Extreme", "price": 1700.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/116", "image": "https://i.ebayimg.com/116.jpg", "model": "RTX 4090"},
+    {"id": "v1|117|0", "title": "PNY RTX 4090 24GB", "price": 1750.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/117", "image": "https://i.ebayimg.com/117.jpg", "model": "RTX 4090"},
+    {"id": "v1|118|0", "title": "RTX 4090 Suprim X", "price": 1850.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/118", "image": "https://i.ebayimg.com/118.jpg", "model": "RTX 4090"},
+    {"id": "v1|119|0", "title": "RTX 4090 Gaming GPU - great deal", "price": 1250.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/119", "image": "https://i.ebayimg.com/119.jpg", "model": "RTX 4090"},
+    {"id": "v1|120|0", "title": "RTX 4090 24GB used works perfect", "price": 1300.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/120", "image": "https://i.ebayimg.com/120.jpg", "model": "RTX 4090"},
+    {"id": "v1|121|0", "title": "RTX 4090 power cable adapter 12VHPWR", "price": 45.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/121", "image": "https://i.ebayimg.com/121.jpg", "model": "RTX 4090"},
+    {"id": "v1|122|0", "title": "RTX 4090 box only (no card)", "price": 60.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/122", "image": "https://i.ebayimg.com/122.jpg", "model": "RTX 4090"}
+  ],
+  "iPhone 15 Pro 256GB": [
+    {"id": "v1|211|0", "title": "Apple iPhone 15 Pro 256GB Natural Titanium Unlocked", "price": 820.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/211", "image": "https://i.ebayimg.com/211.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|212|0", "title": "iPhone 15 Pro 256GB Blue Titanium", "price": 850.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/212", "image": "https://i.ebayimg.com/212.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|213|0", "title": "Apple iPhone 15 Pro 256 GB White Titanium", "price": 860.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/213", "image": "https://i.ebayimg.com/213.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|214|0", "title": "iPhone 15 Pro 256GB Unlocked Excellent", "price": 880.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/214", "image": "https://i.ebayimg.com/214.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|215|0", "title": "Apple iPhone 15 Pro 256GB Black", "price": 900.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/215", "image": "https://i.ebayimg.com/215.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|216|0", "title": "iPhone 15 Pro 256GB Natural Titanium", "price": 910.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/216", "image": "https://i.ebayimg.com/216.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|217|0", "title": "iPhone 15 Pro 256GB Unlocked", "price": 935.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/217", "image": "https://i.ebayimg.com/217.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|218|0", "title": "Apple iPhone 15 Pro 256GB Titanium", "price": 960.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/218", "image": "https://i.ebayimg.com/218.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|219|0", "title": "iPhone 15 Pro 256GB clean unlocked deal", "price": 650.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/219", "image": "https://i.ebayimg.com/219.jpg", "model": "iPhone 15 Pro 256GB"},
+    {"id": "v1|220|0", "title": "iPhone 15 Pro 256GB cracked screen for parts", "price": 280.0, "currency": "USD", "condition": "For parts or not working", "url": "https://www.ebay.com/itm/220", "image": "https://i.ebayimg.com/220.jpg", "model": "iPhone 15 Pro 256GB"}
+  ],
+  "RX 7900 XTX": [
+    {"id": "v1|311|0", "title": "AMD RX 7900 XTX 24GB", "price": 720.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/311", "image": "https://i.ebayimg.com/311.jpg", "model": "RX 7900 XTX"},
+    {"id": "v1|312|0", "title": "Sapphire RX 7900 XTX Nitro+", "price": 760.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/312", "image": "https://i.ebayimg.com/312.jpg", "model": "RX 7900 XTX"},
+    {"id": "v1|313|0", "title": "RX 7900 XTX Reference", "price": 700.0, "currency": "USD", "condition": "Used", "url": "https://www.ebay.com/itm/313", "image": "https://i.ebayimg.com/313.jpg", "model": "RX 7900 XTX"}
+  ]
+}
