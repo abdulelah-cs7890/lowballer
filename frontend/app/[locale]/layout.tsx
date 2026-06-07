@@ -6,6 +6,8 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { Space_Grotesk, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import Header from "@/components/Header";
+import { DealsStreamProvider } from "@/components/DealsStream";
+import Toaster from "@/components/Toaster";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
@@ -50,8 +52,11 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} className={`${display.variable} ${arabic.variable}`}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Header />
-          {children}
+          <DealsStreamProvider>
+            <Header />
+            {children}
+            <Toaster />
+          </DealsStreamProvider>
         </NextIntlClientProvider>
       </body>
     </html>

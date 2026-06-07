@@ -13,7 +13,7 @@ underpriced ones — **live**, **bilingual (AR / EN + RTL)**, in a dark dashboar
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=flat-square)
 ![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white&style=flat-square)
 ![eBay API](https://img.shields.io/badge/eBay_Browse_API-0064D2?logo=ebay&logoColor=white&style=flat-square)
-![tests](https://img.shields.io/badge/tests-18_passing-3FB950?style=flat-square)
+![tests](https://img.shields.io/badge/tests-20_passing-3FB950?style=flat-square)
 
 <img src="docs/screenshots/ebay-dashboard-en.png" alt="Lowballer dashboard" width="880">
 
@@ -36,6 +36,7 @@ listings**, then flags anything priced well below it.
 | **2 · Value** | median of same-model comps, outlier-trimmed |
 | **3 · Filter** | category + relevance + condition rules drop accessories / broken / locked / wrong-variant — *cheap-for-a-reason ≠ a deal* |
 | **4 · Serve** | flagged deals in a **real-time (SSE)** dashboard, fully **bilingual**, with the comps behind each price |
+| **5 · Refresh** | a scheduler re-checks eBay on an interval — *genuinely* new deals stream to the dashboard live as a **toast + notification bell** (idempotent: re-runs don't re-notify) |
 
 ---
 
@@ -48,6 +49,10 @@ listings**, then flags anything priced well below it.
 **Deal detail** — the fair value, the comparable listings it's based on, and a link to the real eBay item:
 
 <img src="docs/screenshots/ebay-detail-en.png" alt="Deal detail with comps" width="880">
+
+**Realtime notifications** — new deals stream in as a toast + the header bell's unread count, over one shared SSE connection:
+
+<img src="docs/screenshots/notif-toast.png" alt="On-site notifications: toast + bell" width="880">
 
 ---
 
@@ -124,9 +129,9 @@ dictionaries, and gear / fuel / origin keywords.
 ## 🏗️ Architecture
 
 ```
-eBay Browse API ─▶ comps-median + noise filter ─▶ flag ─▶ DB (SQLite/Postgres) ─▶ FastAPI ─▶ Next.js
-                                                            │
-                                                            └─▶ SSE ─▶ live "new deals" feed
+scheduler ⟳ ─▶ eBay Browse API ─▶ comps-median + noise filter ─▶ flag ─▶ DB (SQLite/Postgres) ─▶ FastAPI ─▶ Next.js
+                                                                          │
+                                                                          └─▶ SSE ─▶ toast · bell · live feed
 ```
 
 The Haraj-era pipeline (scrape → turbo-stream parse → normalize → ML value) is documented in
@@ -153,22 +158,27 @@ cd backend && python -m venv .venv && .venv/Scripts/python -m pip install -r req
 # eBay deals (the live product) — put free keys in backend/.env first:
 #   EBAY_CLIENT_ID / EBAY_CLIENT_SECRET   (from developer.ebay.com)
 .venv/Scripts/python -m app.ebay.check "RTX 4090"      # smoke-test the API
-.venv/Scripts/python -m app.ebay.ingest                # real deals into the DB
+.venv/Scripts/python -m app.ebay.ingest                # initial load of real deals
 .venv/Scripts/python -m uvicorn app.main:app --reload  # :8000
+.venv/Scripts/python -m app.ebay.scheduler             # keep deals fresh (new ones pop on the site)
 
 # frontend
 cd ../frontend && npm install && npm run dev           # http://localhost:3000
 ```
 
+> New deals surface **on the dashboard live** — a toast slides in and the header bell counts
+> them — driven by the SSE stream. No external alerting to set up.
+
 > The Haraj-era ML pipeline runs with **no accounts**:
 > `python -m ml.train && python -m ml.evaluate && python -m ml.backtest`
 
-Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **18 passing**
+Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **20 passing**
 
 ---
 
 ## 📍 Status
 
 - ✅ **eBay electronics deal-finder** — live: real Browse-API data · comps valuation + noise filtering · product UI · realtime SSE · AR/EN RTL
+- ✅ **Auto-refresh + on-site notifications** — scheduled incremental refresh (idempotent) streams new deals to the dashboard live (toast + notification bell)
 - ✅ **Haraj era (in repo)** — ML valuation model (real Saudi data, backtested) · turbo-stream scraper · the price-availability finding that drove the pivot
-- ⬜ **Deferred** — Telegram alerts · auth / saved searches · cloud deploy (wired, pending accounts)
+- ⬜ **Deferred** — auth / saved searches · cloud deploy (wired, pending accounts)

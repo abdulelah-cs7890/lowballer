@@ -1,34 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import type { Deal } from "@/lib/api";
 import DealCard from "./DealCard";
+import { useDealsStream } from "./DealsStream";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
-
-/** Subscribes to the SSE stream and surfaces newly flagged deals live, no refresh. */
+/** Dashboard "new deals" row — shares the app-wide SSE connection (see DealsStream). */
 export default function LiveFeed() {
   const t = useTranslations("live");
-  const [deals, setDeals] = useState<Deal[]>([]);
-  const [connected, setConnected] = useState(false);
-
-  useEffect(() => {
-    const es = new EventSource(`${API}/deals/stream`);
-    es.onopen = () => setConnected(true);
-    es.onerror = () => setConnected(false);
-    es.onmessage = (e) => {
-      try {
-        const deal = JSON.parse(e.data) as Deal;
-        setDeals((prev) =>
-          prev.some((d) => d.id === deal.id) ? prev : [deal, ...prev].slice(0, 9),
-        );
-      } catch {
-        /* ignore malformed frames */
-      }
-    };
-    return () => es.close();
-  }, []);
+  const { deals, connected } = useDealsStream();
+  const fresh = deals.slice(0, 9);
 
   return (
     <div className="mb-6">
@@ -43,14 +23,12 @@ export default function LiveFeed() {
         </span>
         <span className={connected ? "text-accent" : "text-slate-500"}>{t("indicator")}</span>
         <span className="text-slate-500">·</span>
-        <span className="text-slate-500">
-          {deals.length > 0 ? t("newDeals") : t("waiting")}
-        </span>
+        <span className="text-slate-500">{fresh.length > 0 ? t("newDeals") : t("waiting")}</span>
       </div>
 
-      {deals.length > 0 && (
+      {fresh.length > 0 && (
         <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {deals.map((d) => (
+          {fresh.map((d) => (
             <div key={d.id} className="animate-in-up relative rounded-2xl ring-1 ring-accent/40">
               <span className="absolute -top-2 end-3 z-10 rounded-full bg-accent px-2 py-0.5 text-[10px] font-bold text-ink-950">
                 {t("new")}

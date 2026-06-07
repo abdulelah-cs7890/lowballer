@@ -25,7 +25,14 @@ STREAM_POLL_SECONDS = 2.0
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    task = None
+    if settings.refresh_interval_seconds > 0:
+        from app.ebay.scheduler import run_loop
+
+        task = asyncio.create_task(run_loop(settings.refresh_interval_seconds))
     yield
+    if task:
+        task.cancel()
 
 
 app = FastAPI(title="Lowballer API", version="0.1.0", lifespan=lifespan)

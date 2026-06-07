@@ -110,6 +110,56 @@ def ingest(search_fn: SearchFn, *, watchlist=WATCHLIST, threshold: float | None 
     return stats
 
 
+def refresh(search_fn: SearchFn | None = None, *, watchlist=WATCHLIST, threshold: float | None = None) -> list[dict]:
+    """Incremental, idempotent refresh (no wipe): keep deals current and create flags only
+    for the *newly* underpriced listings. Those new flags stream to the dashboard live via
+    SSE (the on-site notification). Returns the new-deal dicts.
+    """
+    threshold = settings.flag_threshold if threshold is None else threshold
+    if search_fn is None:
+        search_fn = _live_search_fn()
+    init_db()
+    session = SessionLocal()
+    new_deals: list[dict] = []
+
+    for category, query, category_id, include, exclude in watchlist:
+        try:
+            items = search_fn(query, category_id)
+        except Exception:
+            continue
+        items = [it for it in items if _relevant(it.get("title"), include, exclude)]
+        fair = comps_value([it.get("price") for it in items])
+        if fair is None:
+            continue
+        current_ids: set[str] = set()
+        for it in items:
+            if not it.get("price"):
+                continue
+            listing_id = f"ebay-{it['id']}"
+            current_ids.add(listing_id)
+            valuation = assess(it["price"], fair, threshold)
+            record = {
+                "make": category, "model": query, "price": it["price"],
+                "title": it.get("title"), "image": it.get("image"), "condition": it.get("condition"),
+            }
+            status = repository.upsert_deal(
+                session, listing_id, record, valuation,
+                source="ebay", url=it.get("url"), title=it.get("title"),
+            )
+            if status == "new":
+                new_deals.append({
+                    "model": query, "category": category, "price": it["price"], "median": fair,
+                    "percent_below": valuation.percent_below, "condition": it.get("condition"),
+                    "url": it.get("url"), "title": it.get("title"),
+                })
+        repository.close_missing_flags(session, query, current_ids)
+        session.commit()
+
+    session.close()
+    print(f"Refresh: {len(new_deals)} new deal(s).")
+    return new_deals
+
+
 def _live_search_fn() -> SearchFn:
     from app.ebay.client import EbayClient
 

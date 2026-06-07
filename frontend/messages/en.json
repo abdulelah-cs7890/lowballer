@@ -12,6 +12,13 @@
     "waiting": "Watching for new deals…",
     "new": "NEW"
   },
+  "notifications": {
+    "title": "New deals",
+    "newDeal": "New deal",
+    "empty": "No new deals yet — watching live.",
+    "live": "Live",
+    "offline": "Reconnecting…"
+  },
   "filters": {
     "make": "Category",
     "makePlaceholder": "e.g. GPU",

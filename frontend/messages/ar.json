@@ -12,6 +12,13 @@
     "waiting": "بانتظار عروض جديدة…",
     "new": "جديد"
   },
+  "notifications": {
+    "title": "عروض جديدة",
+    "newDeal": "عرض جديد",
+    "empty": "لا توجد عروض جديدة بعد — مراقبة مباشرة.",
+    "live": "مباشر",
+    "offline": "إعادة الاتصال…"
+  },
   "filters": {
     "make": "الفئة",
     "makePlaceholder": "مثال: GPU",

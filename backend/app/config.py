@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     ebay_client_secret: str = ""
     ebay_marketplace: str = "EBAY_US"
 
+    # Auto-refresh inside the API process (seconds). 0 = off (run the scheduler standalone).
+    refresh_interval_seconds: int = 0
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     @property

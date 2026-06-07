@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import LocaleToggle from "./LocaleToggle";
+import NotificationBell from "./NotificationBell";
 
 export default async function Header() {
   const t = await getTranslations("header");
@@ -16,7 +17,10 @@ export default async function Header() {
             <span className="mt-1 text-[11px] text-slate-400">{t("tagline")}</span>
           </span>
         </Link>
-        <LocaleToggle />
+        <div className="flex items-center gap-2.5">
+          <NotificationBell />
+          <LocaleToggle />
+        </div>
       </div>
     </header>
   );
