@@ -27,7 +27,7 @@ SessionLocal = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False
 
 
 def init_db() -> None:
-    """Create tables if they don't exist (dev convenience; prod uses supabase/schema.sql)."""
+    """Create tables if they don't exist, from the ORM models (SQLite dev + Supabase prod)."""
     from app.models import tables  # noqa: F401  ensure models are registered
 
     Base.metadata.create_all(engine)

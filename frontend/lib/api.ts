@@ -2,9 +2,6 @@ export type Deal = {
   id: string;
   make: string | null; // product category (GPU, Phone, …)
   model: string | null; // product model (RTX 4090, …)
-  year: number | null;
-  mileage_km: number | null;
-  region: string | null;
   url: string | null;
   title: string | null;
   image: string | null;
@@ -13,26 +10,17 @@ export type Deal = {
   predicted_price: number; // comps median (fair value)
   percent_below: number;
   needs_review: boolean;
-  model_mae: number | null;
 };
 
 export type Comp = {
   make: string | null;
   model: string | null;
-  year: number | null;
-  mileage_km: number | null;
   title: string | null;
   condition: string | null;
   asking_price: number;
 };
 
 export type DealDetail = Deal & {
-  engine_size: number | null;
-  fuel_type: string | null;
-  gear_type: string | null;
-  origin: string | null;
-  color: string | null;
-  options: string | null;
   comps: Comp[];
 };
 

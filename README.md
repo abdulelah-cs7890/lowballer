@@ -84,6 +84,10 @@ separating real deals from cheap-for-a-reason.
 
 <br>
 
+> 📦 This pipeline is **archived under [`backend/legacy/`](backend/legacy)** (see its
+> [README](backend/legacy/README.md)). It's kept for this story but isn't imported by the live
+> eBay app and is excluded from CI.
+
 **Valuation model** — XGBoost on log-price, trained on the
 [Saudi Arabia Used Cars dataset](https://www.kaggle.com/datasets/turkibintalib/saudi-arabia-used-cars-dataset)
 (5,389 cleaned listings). Honest, domain-typical accuracy:
@@ -94,7 +98,7 @@ separating real deals from cheap-for-a-reason.
 | R² | 0.89 |
 | MAPE | 16.6 % (median 10.6 %) |
 
-<img src="backend/ml/artifacts/feature_importance.png" alt="Feature importance" width="560">
+<img src="backend/legacy/ml/artifacts/feature_importance.png" alt="Feature importance" width="560">
 
 **Mispricing-detector backtest** — a good model isn't enough; the flag rule must catch real
 deals without false alarms:
@@ -108,9 +112,9 @@ deals without false alarms:
 
 12 % is the best-F1 operating point; a 45 % discount trips a *"needs review"* scam guard.
 
-<img src="backend/ml/artifacts/pr_curve.png" alt="Precision-recall curve" width="460">
+<img src="backend/legacy/ml/artifacts/pr_curve.png" alt="Precision-recall curve" width="460">
 
-**Arabic normalizer** — `app/scraper/normalize.py` turns unstructured Arabic prose:
+**Arabic normalizer** — `backend/legacy/scraper/normalize.py` turns unstructured Arabic prose:
 
 ```
 تويوتا كامري موديل ٢٠١٩ ماشي ٩٠ الف نظيفه وارد اوتوماتيك السعر ٦٨٠٠٠
@@ -173,10 +177,12 @@ cd ../frontend && npm install && npm run dev           # http://localhost:3000
 > New deals surface **on the dashboard live** — a toast slides in and the header bell counts
 > them — driven by the SSE stream. No external alerting to set up.
 
-> The Haraj-era ML pipeline runs with **no accounts**:
-> `python -m ml.train && python -m ml.evaluate && python -m ml.backtest`
+> The archived Haraj-era ML pipeline runs with **no accounts** (from `backend/`):
+> `python -m legacy.ml.train && python -m legacy.ml.evaluate && python -m legacy.ml.backtest`
 
-Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **24 passing** (CI runs pytest + `next build` on every push)
+Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **9 passing** (the live eBay
+API; CI runs this + `next build` on every push). The archived Haraj suite adds **15 more** via
+`pytest legacy/tests`.
 
 ---
 
@@ -202,6 +208,6 @@ ships a [`render.yaml`](render.yaml) Blueprint, a slim `backend/requirements-api
 
 - ✅ **eBay electronics deal-finder** — live: real Browse-API data · comps valuation + noise filtering · product UI · realtime SSE · AR/EN RTL
 - ✅ **Auto-refresh + on-site notifications** — scheduled incremental refresh (idempotent) streams new deals to the dashboard live (toast + notification bell)
-- ✅ **Haraj era (in repo)** — ML valuation model (real Saudi data, backtested) · turbo-stream scraper · the price-availability finding that drove the pivot
+- ✅ **Haraj era (archived in [`backend/legacy/`](backend/legacy))** — ML valuation model (real Saudi data, backtested) · turbo-stream scraper · the price-availability finding that drove the pivot
 - ✅ **Cloud deploy** — **[live](https://lowballer.vercel.app)** on Vercel · Render · Supabase (all free); see [Deploy](#️-deploy)
 - ⬜ **Deferred** — auth / saved searches · sold-price anchoring

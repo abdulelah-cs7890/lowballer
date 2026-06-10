@@ -13,7 +13,7 @@ value:
 Because the detector only sees the *model's* estimate, its precision/recall reflect
 real model error. Run after training:
 
-    python -m ml.backtest
+    python -m legacy.ml.backtest
 """
 
 from __future__ import annotations

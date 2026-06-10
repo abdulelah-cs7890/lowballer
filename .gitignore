@@ -6,11 +6,11 @@ venv/
 *.egg-info/
 .pytest_cache/
 
-# ML artifacts & data (keep the presentation plots for the README)
-backend/ml/data/*.csv
-backend/ml/data/*.parquet
-backend/ml/artifacts/*
-!backend/ml/artifacts/*.png
+# ML artifacts & data — archived Haraj-era pipeline (keep the presentation plots for the README)
+backend/legacy/ml/data/*.csv
+backend/legacy/ml/data/*.parquet
+backend/legacy/ml/artifacts/*
+!backend/legacy/ml/artifacts/*.png
 *.pkl
 *.joblib
 

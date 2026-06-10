@@ -1,6 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { fetchDeals, type Deal } from "@/lib/api";
-import { money } from "@/lib/format";
 import DealCard from "@/components/DealCard";
 import Filters from "@/components/Filters";
 import LiveFeed from "@/components/LiveFeed";
@@ -34,20 +33,12 @@ export default async function Home({
     deals = [];
   }
 
-  const mae = deals.find((d) => d.model_mae != null)?.model_mae ?? null;
-
   return (
     <main className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl font-bold text-white">{t("deals.title")}</h1>
-          {mae != null && (
-            <p className="mt-2">
-              <span className="rounded-full bg-ink-800 px-2.5 py-1 text-xs font-medium text-slate-300">
-                {t("deals.modelError", { mae: `${money(mae)} ${t("units.sar")}` })}
-              </span>
-            </p>
-          )}
+          <p className="mt-2 text-sm text-slate-400">{t("deals.subtitle")}</p>
         </div>
         <Filters make={make} minPct={minPct} />
       </div>

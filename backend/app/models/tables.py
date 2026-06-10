@@ -1,7 +1,7 @@
 """SQLAlchemy ORM models: listings, valuations, flags.
 
-These mirror `supabase/schema.sql` so the same shape works on SQLite (dev) and
-Supabase Postgres (prod).
+These ORM models are the schema's single source of truth (created at startup via
+`init_db()`); the same shape works on SQLite (dev) and Supabase Postgres (prod).
 """
 
 from __future__ import annotations
@@ -15,31 +15,21 @@ from app.db import Base
 
 
 class Listing(Base):
-    """A car listing (scraped from Haraj, or seeded), normalized to the model schema."""
+    """A product listing (eBay), de-duplicated by its listing id."""
 
     __tablename__ = "listings"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)  # e.g. haraj listing id
-    source: Mapped[str] = mapped_column(String, default="seed")
+    id: Mapped[str] = mapped_column(String, primary_key=True)  # eBay item id
+    source: Mapped[str] = mapped_column(String, default="ebay")
     url: Mapped[str | None] = mapped_column(String, nullable=True)
     title: Mapped[str | None] = mapped_column(String, nullable=True)
 
-    make: Mapped[str | None] = mapped_column(String, nullable=True)
-    model: Mapped[str | None] = mapped_column(String, nullable=True)
-    year: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    mileage_km: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    engine_size: Mapped[float | None] = mapped_column(Float, nullable=True)
-    fuel_type: Mapped[str | None] = mapped_column(String, nullable=True)
-    gear_type: Mapped[str | None] = mapped_column(String, nullable=True)
-    origin: Mapped[str | None] = mapped_column(String, nullable=True)
-    region: Mapped[str | None] = mapped_column(String, nullable=True)
-    color: Mapped[str | None] = mapped_column(String, nullable=True)
-    options: Mapped[str | None] = mapped_column(String, nullable=True)
-
-    asking_price: Mapped[float] = mapped_column(Float, nullable=False)
-    # product fields (eBay): cars leave these null
+    make: Mapped[str | None] = mapped_column(String, nullable=True)   # category (GPU, Phone, …)
+    model: Mapped[str | None] = mapped_column(String, nullable=True)  # product model (RTX 4090, …)
     image: Mapped[str | None] = mapped_column(String, nullable=True)
     condition: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    asking_price: Mapped[float] = mapped_column(Float, nullable=False)
     scraped_at: Mapped[dt.datetime] = mapped_column(DateTime, server_default=func.now())
 
 

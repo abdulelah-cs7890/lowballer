@@ -2,11 +2,11 @@
 
 Run from the `backend/` directory:
 
-    python -m ml.train
+    python -m legacy.ml.train
 
 Loads the dataset (real Kaggle CSV if present, else synthetic), trains an XGBoost
 regressor on log-price, evaluates on a held-out split, and writes the model + metrics
-to `ml/artifacts/`. Those artifacts are what the live API/worker loads to value listings.
+to `legacy/ml/artifacts/`. (Archived Haraj-era pipeline; the live eBay app doesn't load these.)
 """
 
 from __future__ import annotations
@@ -23,8 +23,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from xgboost import XGBRegressor
 
-from app.valuation.features import TARGET, build_preprocessor, prepare_features
-from ml.data_loader import load_dataset
+from legacy.valuation.features import TARGET, build_preprocessor, prepare_features
+from legacy.ml.data_loader import load_dataset
 
 ARTIFACT_DIR = Path(__file__).resolve().parent / "artifacts"
 SEED = 42

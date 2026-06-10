@@ -5,13 +5,13 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from app.valuation.features import (
+from legacy.valuation.features import (
     FEATURE_COLUMNS,
     REFERENCE_YEAR,
     add_derived_features,
     prepare_features,
 )
-from app.valuation.model import MODEL_PATH, Valuator
+from legacy.valuation.model import MODEL_PATH, Valuator
 
 CAR = dict(
     make="Toyota", model="Camry", year=2019, mileage_km=90_000, engine_size=2.5,
@@ -38,7 +38,7 @@ def test_missing_categorical_is_imputed():
 
 
 needs_model = pytest.mark.skipif(
-    not MODEL_PATH.exists(), reason="model artifact missing; run `python -m ml.train`"
+    not MODEL_PATH.exists(), reason="model artifact missing; run `python -m legacy.ml.train`"
 )
 
 

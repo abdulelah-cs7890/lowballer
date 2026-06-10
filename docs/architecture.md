@@ -1,4 +1,9 @@
-# Architecture
+# Architecture — Haraj era (archived)
+
+> 📦 This documents the **original Haraj used-car pipeline**, now archived under
+> [`backend/legacy/`](../backend/legacy) ([README](../backend/legacy/README.md)). The **live**
+> system runs on the eBay Browse API with a comps-median valuation — see the
+> [root README](../README.md). Kept here because the Haraj → eBay pivot is the project's story.
 
 ## Overview
 
@@ -22,8 +27,8 @@ ones into a database that the API and dashboard read.
                                                           │
                               ┌───────────────────────────┼───────────────────────┐
                               ▼                            ▼                        ▼
-                       FastAPI /deals          SSE /deals/stream (M4 ✓)    Telegram alerts (later)
-                              │                            │
+                       FastAPI /deals          SSE /deals/stream      on-site notifications
+                              │                            │           (toast + bell)
                               ▼                            ▼
                        Next.js dashboard (Vercel) ◀─ EventSource (live deals)
 ```
@@ -32,14 +37,14 @@ ones into a database that the API and dashboard read.
 
 | Component | Path | Responsibility |
 |---|---|---|
-| Feature schema | `backend/app/valuation/features.py` | Canonical columns + preprocessing, shared by train & serve |
-| Model + flag logic | `backend/app/valuation/model.py` | `Valuator`: predict fair value, decide flag / needs-review |
-| Trainer | `backend/ml/train.py` | XGBoost on log-price → `model.joblib`, `metrics.json` |
-| Evaluator / backtest | `backend/ml/evaluate.py`, `ml/backtest.py` | Error analysis, feature importance, detector precision/recall |
-| Scraper client | `backend/app/scraper/client.py` | robots-aware, rate-limited, retrying HTTP |
-| Parser | `backend/app/scraper/parse.py` | Haraj listing HTML → raw dict |
-| **Normalizer** | `backend/app/scraper/normalize.py` | **Arabic free-text → structured features** |
-| Worker | `backend/app/worker.py` | source → normalize → value → flag → DB |
+| Feature schema | `backend/legacy/valuation/features.py` | Canonical columns + preprocessing, shared by train & serve |
+| Model + flag logic | `backend/legacy/valuation/model.py` | `Valuator`: predict fair value, decide flag / needs-review |
+| Trainer | `backend/legacy/ml/train.py` | XGBoost on log-price → `model.joblib`, `metrics.json` |
+| Evaluator / backtest | `backend/legacy/ml/evaluate.py`, `legacy/ml/backtest.py` | Error analysis, feature importance, detector precision/recall |
+| Scraper client | `backend/legacy/scraper/client.py` | robots-aware, rate-limited, retrying HTTP |
+| Parser | `backend/legacy/scraper/parse.py` | Haraj listing HTML → raw dict |
+| **Normalizer** | `backend/legacy/scraper/normalize.py` | **Arabic free-text → structured features** |
+| Worker | `backend/legacy/worker.py` | source → normalize → value → flag → DB |
 | Data layer | `backend/app/repository.py`, `models/` | All DB access; storage-engine agnostic |
 | API | `backend/app/main.py` | `/deals`, `/deals/{id}`, `/healthz` |
 | Dashboard | `frontend/` | Next.js deal grid + detail/comps |

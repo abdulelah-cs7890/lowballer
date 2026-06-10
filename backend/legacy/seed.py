@@ -2,18 +2,18 @@
 scraper exists. Generates sample cars, values them with the real model, and prices a
 slice of them below fair value to create flagged deals.
 
-    python -m app.seed
+    python -m legacy.seed
 """
 
 from __future__ import annotations
 
 import numpy as np
 
-from app import repository
 from app.db import SessionLocal, init_db
 from app.models.tables import Flag, Listing, Valuation
-from app.valuation.model import Valuator
-from ml.synth import make_synthetic_dataset
+from legacy.ml.synth import make_synthetic_dataset
+from legacy.recorder import record_listing
+from legacy.valuation.model import Valuator
 
 
 def _to_native(record: dict) -> dict:
@@ -48,7 +48,7 @@ def seed(n: int = 200, seed_val: int = 7) -> None:
 
         valuation = valuator.value({**attrs, "price": asking})
         listing_id = f"seed-{i:04d}"
-        repository.record_listing(
+        record_listing(
             session,
             listing_id,
             {**attrs, "price": asking},

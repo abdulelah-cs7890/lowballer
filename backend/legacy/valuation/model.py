@@ -18,7 +18,7 @@ import pandas as pd
 
 from .features import prepare_features
 
-ARTIFACT_DIR = Path(__file__).resolve().parents[2] / "ml" / "artifacts"
+ARTIFACT_DIR = Path(__file__).resolve().parents[1] / "ml" / "artifacts"
 MODEL_PATH = ARTIFACT_DIR / "model.joblib"
 METRICS_PATH = ARTIFACT_DIR / "metrics.json"
 

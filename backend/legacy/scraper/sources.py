@@ -12,10 +12,10 @@ import json
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 
-from app.scraper.client import HarajClient
-from app.scraper.parse import extract_listing
+from legacy.scraper.client import HarajClient
+from legacy.scraper.parse import extract_listing
 
-FIXTURES = Path(__file__).resolve().parents[2] / "tests" / "fixtures" / "car_listings.json"
+FIXTURES = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "car_listings.json"
 
 
 def fixture_source() -> Iterator[dict]:

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import statistics
 
-from app.valuation.model import DEFAULT_FLAG_THRESHOLD, Valuation
+from app.pricing import DEFAULT_FLAG_THRESHOLD, Valuation
 
 SUSPICIOUS_DISCOUNT = 0.45  # eBay is efficient: a bigger gap is almost always defective/wrong
 MIN_COMPS = 8  # need enough listings for a trustworthy median
@@ -36,5 +36,4 @@ def assess(price: float, fair_value: float, threshold: float = DEFAULT_FLAG_THRE
         # a real deal: meaningfully below median but not absurdly so
         is_flagged=(threshold <= pct_below < SUSPICIOUS_DISCOUNT),
         needs_review=suspicious,
-        model_mae=None,
     )

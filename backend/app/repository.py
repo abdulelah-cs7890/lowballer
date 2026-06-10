@@ -8,12 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.tables import Flag, Listing, Valuation
-from app.valuation.model import Valuation as ValuationResult
-
-_NORMALIZED_FIELDS = [
-    "make", "model", "year", "mileage_km", "engine_size", "fuel_type",
-    "gear_type", "origin", "region", "color", "options",
-]
+from app.pricing import Valuation as ValuationResult
 
 
 def _deal_dict(listing: Listing, valuation: Valuation) -> dict:
@@ -21,9 +16,6 @@ def _deal_dict(listing: Listing, valuation: Valuation) -> dict:
         "id": listing.id,
         "make": listing.make,
         "model": listing.model,
-        "year": listing.year,
-        "mileage_km": listing.mileage_km,
-        "region": listing.region,
         "url": listing.url,
         "title": listing.title,
         "image": listing.image,
@@ -32,7 +24,6 @@ def _deal_dict(listing: Listing, valuation: Valuation) -> dict:
         "predicted_price": valuation.predicted_price,
         "percent_below": valuation.percent_below,
         "needs_review": valuation.needs_review,
-        "model_mae": valuation.model_mae,
     }
 
 
@@ -96,33 +87,22 @@ def get_deal(session: Session, listing_id: str) -> dict | None:
         return None
     listing, val = row
     deal = _deal_dict(listing, val)
-    deal.update(
-        engine_size=listing.engine_size,
-        fuel_type=listing.fuel_type,
-        gear_type=listing.gear_type,
-        origin=listing.origin,
-        color=listing.color,
-        options=listing.options,
-        comps=find_comps(session, listing),
-    )
+    deal["comps"] = find_comps(session, listing)
     return deal
 
 
 def find_comps(session: Session, listing: Listing, limit: int = 8) -> list[dict]:
-    """Comparable listings that justify the valuation. Prefer same make+model; if that's
-    sparse, fall back to same-make so the user always sees context.
+    """Comparable listings that justify the valuation. Prefer the same product model; if that's
+    sparse, fall back to the same category so the user always sees context. Cheapest first.
     """
-    base = select(Listing).where(Listing.id != listing.id)
+    base = select(Listing).where(Listing.id != listing.id).order_by(Listing.asking_price)
 
-    def by_year(stmt):
-        return stmt.order_by(func.abs(Listing.year - listing.year)) if listing.year else stmt
-
-    exact = by_year(base.where(Listing.make == listing.make, Listing.model == listing.model))
+    exact = base.where(Listing.make == listing.make, Listing.model == listing.model)
     comps = list(session.execute(exact.limit(limit)).scalars().all())
 
     if len(comps) < limit and listing.make:
         have = {c.id for c in comps}
-        fill = by_year(base.where(Listing.make == listing.make, Listing.model != listing.model))
+        fill = base.where(Listing.make == listing.make, Listing.model != listing.model)
         for c in session.execute(fill.limit(limit * 2)).scalars().all():
             if c.id not in have:
                 comps.append(c)
@@ -133,63 +113,12 @@ def find_comps(session: Session, listing: Listing, limit: int = 8) -> list[dict]
         {
             "make": c.make,
             "model": c.model,
-            "year": c.year,
-            "mileage_km": c.mileage_km,
             "title": c.title,
             "condition": c.condition,
             "asking_price": c.asking_price,
         }
         for c in comps
     ]
-
-
-def record_listing(
-    session: Session,
-    listing_id: str,
-    record: dict,
-    valuation: ValuationResult,
-    *,
-    source: str = "seed",
-    url: str | None = None,
-    title: str | None = None,
-) -> tuple[Listing, Valuation]:
-    """Upsert a listing, store its valuation, and open a flag if it's a deal.
-
-    Shared by the seeder (M2) and the live scrape worker (M3).
-    """
-    listing = session.get(Listing, listing_id) or Listing(id=listing_id)
-    for field in _NORMALIZED_FIELDS:
-        setattr(listing, field, record.get(field))
-    listing.asking_price = record["price"]
-    listing.image = record.get("image")
-    listing.condition = record.get("condition")
-    listing.source = source
-    listing.url = url
-    listing.title = title
-    session.add(listing)
-
-    val = Valuation(
-        listing_id=listing_id,
-        predicted_price=valuation.predicted_price,
-        percent_below=valuation.percent_below,
-        needs_review=valuation.needs_review,
-        model_mae=valuation.model_mae,
-        model_version="xgb-1",
-    )
-    session.add(val)
-    session.flush()  # assign val.id
-
-    if valuation.is_flagged:
-        session.add(
-            Flag(
-                listing_id=listing_id,
-                valuation_id=val.id,
-                percent_below=valuation.percent_below,
-                needs_review=valuation.needs_review,
-                status="open",
-            )
-        )
-    return listing, val
 
 
 def count_ebay_listings(session: Session) -> int:
@@ -213,8 +142,8 @@ def upsert_deal(
     genuinely-new deals.
     """
     listing = session.get(Listing, listing_id) or Listing(id=listing_id)
-    for field in _NORMALIZED_FIELDS:
-        setattr(listing, field, record.get(field))
+    listing.make = record.get("make")        # category (GPU, Phone, …)
+    listing.model = record.get("model")      # product model (RTX 4090, …)
     listing.asking_price = record["price"]
     listing.image = record.get("image")
     listing.condition = record.get("condition")
@@ -233,7 +162,6 @@ def upsert_deal(
     val.predicted_price = valuation.predicted_price
     val.percent_below = valuation.percent_below
     val.needs_review = valuation.needs_review
-    val.model_mae = valuation.model_mae
     val.model_version = "ebay-comps"
     session.flush()
 

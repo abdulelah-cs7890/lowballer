@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from app.scraper.normalize import (
+from legacy.scraper.normalize import (
     detect_make_model,
     extract_mileage,
     extract_price,

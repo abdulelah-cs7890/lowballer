@@ -2,7 +2,7 @@
 
 Run from `backend/` after training:
 
-    python -m ml.evaluate
+    python -m legacy.ml.evaluate
 
 Reads the held-out predictions saved by train.py and produces:
   - a metrics recap + error-by-price-band breakdown (printed)

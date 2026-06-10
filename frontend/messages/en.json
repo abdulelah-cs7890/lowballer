@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Lowballer — underpriced car deals",
-    "description": "ML-flagged used cars listed below their fair market value."
+    "title": "Lowballer — underpriced electronics deals",
+    "description": "Electronics listed below the median price of comparable eBay listings."
   },
   "header": {
     "tagline": "Underpriced electronics, by comparable price"
@@ -28,10 +28,10 @@
   },
   "deals": {
     "title": "Deals",
+    "subtitle": "Electronics priced below the median of comparable eBay listings.",
     "count": "{count} deals",
     "none": "No deals match. Try widening the filters.",
     "apiError": "Couldn't reach the API ({error}). Is the backend running on :8000?",
-    "modelError": "model ±{mae} avg error",
     "belowFairValue": "~{amount} below fair value"
   },
   "deal": {
@@ -65,17 +65,6 @@
     "fairValue": "Fair value (median)"
   },
   "units": {
-    "km": "km",
     "sar": "USD"
-  },
-  "enums": {
-    "fuel": { "Gas": "Gas", "Diesel": "Diesel", "Hybrid": "Hybrid" },
-    "gear": { "Automatic": "Automatic", "Manual": "Manual" },
-    "origin": { "Saudi": "Saudi", "Gulf Arabic": "Gulf", "Imported": "Imported", "Other": "Other" },
-    "options": { "Full": "Full", "Semi Full": "Semi-full", "Standard": "Standard" },
-    "region": {
-      "Riyadh": "Riyadh", "Jeddah": "Jeddah", "Dammam": "Dammam", "Makkah": "Makkah",
-      "Madinah": "Madinah", "Abha": "Abha", "Tabuk": "Tabuk"
-    }
   }
 }

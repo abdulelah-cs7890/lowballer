@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from app.valuation.features import TARGET, normalize_columns
+from legacy.valuation.features import TARGET, normalize_columns
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
 REAL_CSV = DATA_DIR / "saudi_used_cars.csv"

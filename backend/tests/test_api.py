@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from app import repository
 from app.db import Base, get_session
 from app.main import app
-from app.valuation.model import Valuation
+from app.pricing import Valuation
 
 
 @pytest.fixture
@@ -22,11 +22,11 @@ def client(tmp_path):
     Base.metadata.create_all(engine)
 
     with TestSession() as s:
-        deal = Valuation(800, 1200, 0.3333, is_flagged=True, needs_review=False, model_mae=None)
+        deal = Valuation(800, 1200, 0.3333, is_flagged=True, needs_review=False)
         rec = {"make": "GPU", "model": "RTX 4090", "price": 800,
                "title": "NVIDIA RTX 4090 24GB", "image": "http://img/1", "condition": "Used"}
         repository.upsert_deal(s, "ebay-test-1", rec, deal, source="ebay", url="http://ebay/1", title=rec["title"])
-        comp = Valuation(1150, 1200, 0.0417, is_flagged=False, needs_review=False, model_mae=None)
+        comp = Valuation(1150, 1200, 0.0417, is_flagged=False, needs_review=False)
         repository.upsert_deal(s, "ebay-test-2", {**rec, "price": 1150, "title": "ASUS RTX 4090"},
                                comp, source="ebay", url="http://ebay/2", title="ASUS RTX 4090")
         s.commit()

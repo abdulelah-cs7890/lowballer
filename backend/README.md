@@ -1,82 +1,66 @@
 # Lowballer — backend
 
-Python service: the **valuation model** (M1), the **API** (M2), and the **Haraj scraper**
-(M3). Start with the ML pipeline — it runs with zero external accounts.
+FastAPI service for the **live eBay electronics deal-finder**: pull listings via the eBay
+Browse API → value each against its same-model comps (outlier-trimmed median) → flag the
+underpriced ones → serve them to the dashboard, with new deals streaming over SSE.
+
+> The original Haraj-era car pipeline (ML valuation model + scraper) is archived under
+> [`legacy/`](legacy) — see [legacy/README.md](legacy/README.md). It isn't imported here and is
+> excluded from CI.
 
 ## Setup
 
 ```bash
 cd backend
 python -m venv .venv
-.venv/Scripts/python -m pip install -r requirements.txt   # Windows
-# source .venv/bin/activate && pip install -r requirements.txt   # macOS/Linux
+.venv/Scripts/python -m pip install -r requirements-api.txt   # live app: slim deps
+# requirements.txt instead if you also want to run the legacy ML pipeline
 ```
 
-## M1 — train & evaluate the valuation model
+The live path is pure FastAPI + SQLAlchemy + httpx — **no ML/data stack** (scikit-learn,
+numpy, pandas, joblib live only in the archived `legacy/` pipeline).
+
+## Run
 
 ```bash
-python -m ml.train      # trains XGBoost, writes ml/artifacts/{model.joblib, metrics.json}
-python -m ml.evaluate   # error-by-band report + feature-importance & scatter PNGs
+# put free eBay keys in backend/.env first (from developer.ebay.com):
+#   EBAY_CLIENT_ID / EBAY_CLIENT_SECRET
+python -m app.ebay.check "RTX 4090"        # smoke-test the Browse API
+python -m app.ebay.ingest                  # initial load: search → median → flag → DB
+python -m uvicorn app.main:app --reload    # http://localhost:8000
+python -m app.ebay.scheduler               # keep deals fresh; new ones stream to the site
 ```
 
-By default this uses a **synthetic** Saudi-market dataset so it runs immediately. To train
-on real prices, download the [Saudi Arabia Used Cars dataset](https://www.kaggle.com/datasets/turkibintalib/saudi-arabia-used-cars-dataset)
-and save the CSV as `ml/data/saudi_used_cars.csv`, then re-run `python -m ml.train`. The
-column mapping is already wired up (`app/valuation/features.py: KAGGLE_COLUMN_MAP`).
+## How valuation works
 
-Artifacts land in `ml/artifacts/`:
-- `model.joblib` — the fitted pipeline the API/worker loads
-- `metrics.json` — MAE / RMSE / R² / MAPE
-- `feature_importance.png`, `actual_vs_predicted.png` — for the README/portfolio
+For each watched model (`app/ebay/ingest.py: WATCHLIST`) Lowballer searches eBay, drops
+accessories / broken / locked / wrong-variant listings (category + include/exclude tokens +
+`JUNK_MARKERS`), then takes the **trimmed median of the comps** as fair value. A listing
+meaningfully below it is flagged; an *absurd* discount trips a `needs_review` guard
+(`app/ebay/valuation.py`). The refresh is **idempotent** — one open flag per listing — so
+re-runs don't re-notify.
 
-## Using the model
+## Endpoints
 
-```python
-from app.valuation.model import Valuator
-v = Valuator()
-v.value({"make": "Toyota", "model": "Camry", "year": 2019, "mileage_km": 90000,
-         "engine_size": 2.5, "fuel_type": "Gas", "gear_type": "Automatic",
-         "origin": "Saudi", "region": "Riyadh", "color": "White",
-         "options": "Full", "price": 45000})
-# -> Valuation(predicted_price=..., percent_below=..., is_flagged=True, ...)
-```
-
-## M2 — API
-
-```bash
-python -m app.seed                         # populate the dev DB with sample deals
-python -m uvicorn app.main:app --reload     # http://localhost:8000
-```
-Endpoints: `GET /healthz`, `GET /deals` (filters: `make`, `min_price`, `max_price`,
-`min_percent_below`), `GET /deals/{id}` (specs + comps). Storage is SQLAlchemy over
-`DATABASE_URL` — SQLite locally, Supabase Postgres in prod (`supabase/schema.sql`).
-
-## M3 — Haraj scraper + ingest worker
-
-```bash
-python -m app.worker        # ingest fixtures -> normalize -> value -> flag -> DB
-```
-Pipeline: `app/scraper/` does fetch (`client.py`, rate-limited + robots-aware), parse
-(`parse.py`), and the core **Arabic→structured normalizer** (`normalize.py`, e.g.
-`"تويوتا كامري ٢٠١٩ ماشي ٩٠ الف السعر ٣٨٠٠٠"` → `{make: Toyota, model: Camry, year: 2019,
-mileage_km: 90000, price: 38000}`). The default source is offline fixtures
-(`tests/fixtures/car_listings.json`); `live_haraj_source` fetches real listing URLs when
-you're ready.
-
-> Note: fixture asking prices are set ~14–17% below the trained model's fair value so the
-> demo flags realistic deals (no scam-guard false positives).
+`GET /healthz`, `GET /deals` (filters: `make`, `min_price`, `max_price`, `min_percent_below`),
+`GET /deals/{id}` (details + the comps behind the price), `GET /deals/stream` (SSE: each
+newly-flagged deal). Storage is SQLAlchemy over `DATABASE_URL` — SQLite locally, Supabase
+Postgres in prod. Tables are created on startup via `init_db()`.
 
 ## Tests
 
 ```bash
-python -m pytest -q
+python -m pytest -q          # 9 live tests (tests/) — what CI runs
+pytest legacy/tests          # 15 more: the archived Haraj normalizer / parser / ML schema
 ```
 
 ## Layout
 
 ```
-app/valuation/   feature schema (features.py) + inference & flag logic (model.py)
-app/scraper/     Haraj scraper                        (M3)
-app/main.py      FastAPI app                          (M2)
-ml/              train.py, evaluate.py, synthetic + real data loaders
+app/ebay/        Browse API client, comps-median valuation, ingest + refresh, scheduler
+app/pricing.py   the Valuation primitive + flag threshold (no ML deps)
+app/repository.py data access: list/get deals, idempotent upsert_deal, comps
+app/models/      SQLAlchemy tables + Pydantic response schemas
+app/main.py      FastAPI app: /deals, /deals/{id}, /deals/stream (SSE), /healthz
+legacy/          archived Haraj scraper + ML valuation pipeline (not on the live path)
 ```

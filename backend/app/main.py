@@ -1,4 +1,4 @@
-"""Lowballer API — serves flagged underpriced car deals to the dashboard."""
+"""Lowballer API — serves flagged underpriced eBay product deals to the dashboard."""
 
 from __future__ import annotations
 
@@ -17,7 +17,6 @@ from app.config import settings
 from app.db import SessionLocal, get_session, init_db
 from app.models.schemas import DealDetailOut, DealOut, HealthOut
 from app.models.tables import Flag
-from app.valuation.model import MODEL_PATH
 
 STREAM_POLL_SECONDS = 2.0
 
@@ -49,9 +48,7 @@ def healthz(session: Session = Depends(get_session)) -> HealthOut:
     open_deals = session.scalar(
         select(func.count()).select_from(Flag).where(Flag.status == "open")
     )
-    return HealthOut(
-        status="ok", model_loaded=MODEL_PATH.exists(), open_deals=int(open_deals or 0)
-    )
+    return HealthOut(status="ok", open_deals=int(open_deals or 0))
 
 
 @app.get("/deals", response_model=list[DealOut])

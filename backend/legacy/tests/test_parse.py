@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from app.scraper.parse import extract_listing, extract_listing_id
+from legacy.scraper.parse import extract_listing, extract_listing_id
 
 FIXTURE = Path(__file__).parent / "fixtures" / "haraj_listing_sample.html"
 SAMPLE_URL = "https://haraj.com.sa/11176430489/%D8%AA%D9%8A%D9%88%D8%B3_%D9%84%D9%84%D8%A8%D9%8A%D8%B9/"

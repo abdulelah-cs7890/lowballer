@@ -94,7 +94,7 @@ def ingest(search_fn: SearchFn, *, watchlist=WATCHLIST, threshold: float | None 
                 "image": it.get("image"),
                 "condition": it.get("condition"),
             }
-            repository.record_listing(
+            repository.upsert_deal(
                 session, f"ebay-{it['id']}", record, valuation,
                 source="ebay", url=it.get("url"), title=it.get("title"),
             )

@@ -2,10 +2,10 @@
 
 Default run uses the offline fixture source so it works with no network:
 
-    python -m app.worker                 # ingest fixtures, value, flag, write to DB
-    python -m app.worker --keep          # add to existing rows instead of replacing
+    python -m legacy.worker                 # ingest fixtures, value, flag, write to DB
+    python -m legacy.worker --keep          # add to existing rows instead of replacing
 
-Shares `repository.record_listing` with the seeder, so scraped deals show up in the
+Shares `legacy.recorder.record_listing` with the seeder, so scraped deals show up in the
 same API/dashboard.
 """
 
@@ -14,12 +14,12 @@ from __future__ import annotations
 import argparse
 from collections.abc import Iterable
 
-from app import repository
 from app.db import SessionLocal, init_db
 from app.models.tables import Flag, Listing, Valuation
-from app.scraper.normalize import normalize_listing
-from app.scraper.sources import fixture_source
-from app.valuation.model import Valuator
+from legacy.recorder import record_listing
+from legacy.scraper.normalize import normalize_listing
+from legacy.scraper.sources import fixture_source
+from legacy.valuation.model import Valuator
 
 
 def run(source: Iterable[dict] | None = None, *, min_confidence: float = 0.5, replace: bool = True) -> dict:
@@ -44,7 +44,7 @@ def run(source: Iterable[dict] | None = None, *, min_confidence: float = 0.5, re
             stats["skipped"] += 1
             continue
         valuation = valuator.value(record)
-        repository.record_listing(
+        record_listing(
             session,
             f"haraj-{record['id']}",
             record,

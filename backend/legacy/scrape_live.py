@@ -8,7 +8,7 @@ structured fields recovered from the React-Router data stream (`haraj_stream`).
 Reality check: most Haraj sellers don't publish a price (they negotiate in chat), so the
 yield is low — expect to scan many listings per usable deal. Run:
 
-    python -m app.scrape_live --scan 600 --target 25
+    python -m legacy.scrape_live --scan 600 --target 25
 """
 
 from __future__ import annotations
@@ -16,12 +16,12 @@ from __future__ import annotations
 import argparse
 import re
 
-from app import repository
 from app.db import SessionLocal, init_db
 from app.models.tables import Flag, Listing, Valuation
-from app.scraper.client import BASE, HarajClient
-from app.scraper.haraj_stream import extract_stream_fields
-from app.scraper.normalize import (
+from legacy.recorder import record_listing
+from legacy.scraper.client import BASE, HarajClient
+from legacy.scraper.haraj_stream import extract_stream_fields
+from legacy.scraper.normalize import (
     _CITY_REGION,
     _ORIGIN,
     _match_dict,
@@ -30,7 +30,7 @@ from app.scraper.normalize import (
     extract_price,
     extract_year,
 )
-from app.valuation.model import Valuator
+from legacy.valuation.model import Valuator
 
 _FUEL_MAP = {"GASOLINE": "Gas", "GAS": "Gas", "DIESEL": "Diesel", "HYBRID": "Hybrid", "ELECTRIC": "Hybrid"}
 _GEAR_MAP = {"AUTO": "Automatic", "AUTOMATIC": "Automatic", "MANUAL": "Manual"}
@@ -110,7 +110,7 @@ def harvest(scan: int = 600, target: int = 25, min_delay: float = 0.4, replace: 
             continue
         stats["priced"] += 1
         valuation = valuator.value(rec)
-        repository.record_listing(
+        record_listing(
             session, f"haraj-{lid}", rec, valuation, source="haraj-live", url=url, title=rec["title"]
         )
         stats["ingested"] += 1
