@@ -13,7 +13,7 @@ underpriced ones — **live**, **bilingual (AR / EN + RTL)**, in a dark dashboar
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=flat-square)
 ![Tailwind](https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white&style=flat-square)
 ![eBay API](https://img.shields.io/badge/eBay_Browse_API-0064D2?logo=ebay&logoColor=white&style=flat-square)
-![tests](https://img.shields.io/badge/tests-20_passing-3FB950?style=flat-square)
+[![CI](https://github.com/abdulelah-cs7890/lowballer/actions/workflows/ci.yml/badge.svg)](https://github.com/abdulelah-cs7890/lowballer/actions/workflows/ci.yml)
 
 ### 🔗 [**Live demo →**](https://lowballer.vercel.app)
 
@@ -176,7 +176,7 @@ cd ../frontend && npm install && npm run dev           # http://localhost:3000
 > The Haraj-era ML pipeline runs with **no accounts**:
 > `python -m ml.train && python -m ml.evaluate && python -m ml.backtest`
 
-Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **20 passing**
+Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **24 passing** (CI runs pytest + `next build` on every push)
 
 ---
 
