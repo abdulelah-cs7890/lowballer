@@ -1,0 +1,27 @@
+# Render Blueprint for the Lowballer API (free tier).
+# Deploy: Render → New → Blueprint → pick this repo, then fill the `sync: false` secrets.
+services:
+  - type: web
+    name: lowballer-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements-api.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: EBAY_MARKETPLACE
+        value: EBAY_US
+      - key: REFRESH_INTERVAL_SECONDS
+        value: "900" # in-API scheduler keeps deals fresh while the service is warm
+      - key: DATABASE_URL # Supabase Session-Pooler URI, prefixed postgresql+psycopg2://
+        sync: false
+      - key: EBAY_CLIENT_ID
+        sync: false
+      - key: EBAY_CLIENT_SECRET
+        sync: false
+      - key: CORS_ORIGINS # your Vercel URL, e.g. https://lowballer.vercel.app
+        sync: false

@@ -176,9 +176,28 @@ Tests: `cd backend && .venv/Scripts/python -m pytest -q` &nbsp;→&nbsp; **20 pa
 
 ---
 
+## ☁️ Deploy
+
+**Vercel (frontend) · Render free (backend) · Supabase (Postgres)** — all free. The repo
+ships a [`render.yaml`](render.yaml) Blueprint, a slim `backend/requirements-api.txt`, and a
+[keep-warm workflow](.github/workflows/keepwarm.yml).
+
+1. **Supabase** → new project → copy the **Session-Pooler** connection string and prefix it
+   `postgresql+psycopg2://…`. Seed once: `DATABASE_URL=<uri> python -m app.ebay.ingest`.
+2. **Render** → New → Blueprint → this repo → fill the secrets (`DATABASE_URL`,
+   `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `CORS_ORIGINS`). Note the `…onrender.com` URL.
+3. **Vercel** → import repo, **Root Directory = `frontend`**, env
+   `NEXT_PUBLIC_API_URL=<render-url>`. Note the `…vercel.app` URL.
+4. Set Render `CORS_ORIGINS=<vercel-url>` and redeploy (so the browser SSE is allowed).
+5. Set repo **variable** `RENDER_URL` → the keep-warm cron pings `/healthz` every 14 min so the
+   free backend never spins down (or use an external uptime monitor).
+
+---
+
 ## 📍 Status
 
 - ✅ **eBay electronics deal-finder** — live: real Browse-API data · comps valuation + noise filtering · product UI · realtime SSE · AR/EN RTL
 - ✅ **Auto-refresh + on-site notifications** — scheduled incremental refresh (idempotent) streams new deals to the dashboard live (toast + notification bell)
 - ✅ **Haraj era (in repo)** — ML valuation model (real Saudi data, backtested) · turbo-stream scraper · the price-availability finding that drove the pivot
-- ⬜ **Deferred** — auth / saved searches · cloud deploy (wired, pending accounts)
+- 🚧 **Cloud deploy** — config ready (Render Blueprint · Vercel · Supabase); see [Deploy](#️-deploy)
+- ⬜ **Deferred** — auth / saved searches · sold-price anchoring

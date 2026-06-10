@@ -8,6 +8,7 @@ import DiscountBadge from "@/components/DiscountBadge";
 import ValuationBar from "@/components/ValuationBar";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // tolerate a cold (spun-down) backend on first load
 
 export default async function DealPage({
   params,

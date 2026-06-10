@@ -1,0 +1,16 @@
+# Slim runtime deps for the deployed API (Render). Excludes the ML-training stack
+# (xgboost, matplotlib) and the Haraj scraper (selectolax, tenacity) — not on the eBay
+# API path — for a faster, smaller free-tier build. Full set lives in requirements.txt.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+pydantic-settings>=2.2
+python-dotenv>=1.0
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+httpx>=0.27
+# imported transitively when the app loads app.valuation.model -> features (sklearn)
+scikit-learn>=1.4
+numpy>=1.26
+pandas>=2.2
+joblib>=1.3

@@ -1,0 +1,22 @@
+name: keep-warm
+
+# Pings the Render backend so the free instance doesn't spin down (cold starts).
+# Set repo variable RENDER_URL (Settings → Secrets and variables → Actions → Variables)
+# to your backend URL, e.g. https://lowballer-api.onrender.com
+# Note: GitHub's scheduler can be delayed/paused on inactive repos — an external uptime
+# monitor (UptimeRobot, cron-job.org) is more reliable if you need strict warmth.
+
+on:
+  schedule:
+    - cron: "*/14 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /healthz
+        run: |
+          url="${{ vars.RENDER_URL }}"
+          if [ -z "$url" ]; then echo "RENDER_URL not set; skipping."; exit 0; fi
+          curl -fsS --max-time 60 "$url/healthz" && echo " — warm"

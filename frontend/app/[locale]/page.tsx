@@ -6,6 +6,7 @@ import Filters from "@/components/Filters";
 import LiveFeed from "@/components/LiveFeed";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // tolerate a cold (spun-down) backend on first load
 
 export default async function Home({
   params,
