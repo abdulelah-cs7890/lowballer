@@ -15,6 +15,10 @@ underpriced ones — **live**, **bilingual (AR / EN + RTL)**, in a dark dashboar
 ![eBay API](https://img.shields.io/badge/eBay_Browse_API-0064D2?logo=ebay&logoColor=white&style=flat-square)
 ![tests](https://img.shields.io/badge/tests-20_passing-3FB950?style=flat-square)
 
+### 🔗 [**Live demo →**](https://lowballer.vercel.app)
+
+<sub>Hosted free (Vercel · Render · Supabase) — the backend may take ~40s to wake on the first visit.</sub>
+
 <img src="docs/screenshots/ebay-dashboard-en.png" alt="Lowballer dashboard" width="880">
 
 </div>
@@ -199,5 +203,5 @@ ships a [`render.yaml`](render.yaml) Blueprint, a slim `backend/requirements-api
 - ✅ **eBay electronics deal-finder** — live: real Browse-API data · comps valuation + noise filtering · product UI · realtime SSE · AR/EN RTL
 - ✅ **Auto-refresh + on-site notifications** — scheduled incremental refresh (idempotent) streams new deals to the dashboard live (toast + notification bell)
 - ✅ **Haraj era (in repo)** — ML valuation model (real Saudi data, backtested) · turbo-stream scraper · the price-availability finding that drove the pivot
-- 🚧 **Cloud deploy** — config ready (Render Blueprint · Vercel · Supabase); see [Deploy](#️-deploy)
+- ✅ **Cloud deploy** — **[live](https://lowballer.vercel.app)** on Vercel · Render · Supabase (all free); see [Deploy](#️-deploy)
 - ⬜ **Deferred** — auth / saved searches · sold-price anchoring
